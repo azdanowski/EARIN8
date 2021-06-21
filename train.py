@@ -2,13 +2,14 @@ import numpy as np
 import gym
 from matplotlib import pyplot as plt
 
-EPSILON = 0.5
-EPSILON_MIN = 0.01
+EPSILON = 0.1
+EPSILON_MIN = 0.1
 EPSILON_MAX = 1
 DECAY = 0.05
-EPISODES = 5000
-ALPHA = 0.1
-GAMMA = 0.6
+
+EPISODES = 501
+ALPHA = 1.0
+GAMMA = 0.9
 
 
 def train(q_table, env):
@@ -31,9 +32,9 @@ def train(q_table, env):
                 too_long_episodes += 1
                 #print("Episode LENGTH EXCEEDED minimum!")
         global EPSILON
-        EPSILON = (
-            EPSILON_MIN + (EPSILON_MAX - EPSILON_MIN) * np.exp(-DECAY * EPISODES)
-        )
+#        EPSILON = (
+#            EPSILON_MIN + (EPSILON_MAX - EPSILON_MIN) * np.exp(-DECAY * EPISODES)
+#        )
         if i % 100 == 0:      
             print(f"Episode: {i+1}")
             print(f"\tLength: {episode_length}, Penalties: "
@@ -51,7 +52,6 @@ def _step(q_table, env, state):
     
     next_state, reward, done, _, = env.step(action)
     prev_q = q_table[state][action]
-    
     
     next_max_val = np.max(q_table[next_state])
     
